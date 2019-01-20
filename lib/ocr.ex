@@ -19,6 +19,7 @@ defmodule Ocr do
   def read_account_number(account_lines) do
     %AccountNumber{}
     |> with_numerals(account_lines)
+    |> with_ill_status
   end
 
   defp with_numerals(account_number, account_lines) do
@@ -28,5 +29,13 @@ defmodule Ocr do
         account_lines
         |> Account.split_numerals
         |> Enum.map(&Account.to_account_char/1) }
+  end
+
+  defp with_ill_status(account_number) do
+    if Enum.member?(account_number.numerals, "?") do
+      %{ account_number | status: :ill }
+    else
+      account_number
+    end
   end
 end
