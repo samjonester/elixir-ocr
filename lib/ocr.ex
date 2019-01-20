@@ -17,15 +17,19 @@ defmodule Ocr do
 
   ## Examples
 
-  iex> Ocr.read_account_number(
-  ...>   "    _  _     _  _  _  _  _ \\n" <>
-  ...>   "  | _| _||_||_ |_   ||_||_|\\n" <>
-  ...>   "  ||_  _|  | _||_|  ||_| _|\\n"
-  ...> )
+  iex> Ocr.read_account_number([
+  ...>   "    _  _     _  _  _  _  _ ",
+  ...>   "  | _| _||_||_ |_   ||_||_|",
+  ...>   "  ||_  _|  | _||_|  ||_| _|",
+  ...>   "                           "
+  ...> ])
   "123456789"
 
   """
-  def read_account_number(_account_number) do
-    "123456789"
+  def read_account_number(account_lines) do
+    account_lines
+    |> Account.split_numerals
+    |> Enum.map(&Account.to_account_char/1)
+    |> Enum.join
   end
 end

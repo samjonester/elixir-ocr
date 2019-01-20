@@ -2,12 +2,14 @@ defmodule OcrTest do
   use ExUnit.Case
   doctest Ocr
 
-  test "reads an account number" do
-    account_number =
-      "    _  _     _  _  _  _  _ \n" <>
-      "  | _| _||_||_ |_   ||_||_|\n" <>
-      "  ||_  _|  | _||_|  ||_| _|\n"
+  test "reads all account numerals" do
+    account_lines = [
+      "    _  _     _  _  _  _  _  _ ",
+      "  | _| _||_||_ |_   ||_||_|| |",
+      "  ||_  _|  | _||_|  ||_| _||_|",
+      "                              "
+    ]
 
-    assert Ocr.read_account_number(account_number) == "123456789"
+    assert Ocr.read_account_number(account_lines) == "1234567890"
   end
 end
