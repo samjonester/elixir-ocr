@@ -15,21 +15,18 @@ defmodule Ocr do
   @doc """
   Reads an account number in the form of 4 lines of characters and produces a serializable version of the account number
 
-  ## Examples
-
-  iex> Ocr.read_account_number([
-  ...>   "    _  _     _  _  _  _  _ ",
-  ...>   "  | _| _||_||_ |_   ||_||_|",
-  ...>   "  ||_  _|  | _||_|  ||_| _|",
-  ...>   "                           "
-  ...> ])
-  "123456789"
-
   """
   def read_account_number(account_lines) do
-    account_lines
-    |> Account.split_numerals
-    |> Enum.map(&Account.to_account_char/1)
-    |> Enum.join
+    %AccountNumber{}
+    |> with_numerals(account_lines)
+  end
+
+  defp with_numerals(account_number, account_lines) do
+    %{
+      account_number |
+      numerals:
+        account_lines
+        |> Account.split_numerals
+        |> Enum.map(&Account.to_account_char/1) }
   end
 end

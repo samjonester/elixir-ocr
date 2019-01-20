@@ -7,9 +7,12 @@ defmodule OcrTest do
       "    _  _     _  _  _  _  _  _ ",
       "  | _| _||_||_ |_   ||_||_|| |",
       "  ||_  _|  | _||_|  ||_| _||_|",
-      "                              "
-    ]
+      "                              " ]
 
-    assert Ocr.read_account_number(account_lines) == "1234567890"
+    actual = account_lines
+    |> Ocr.read_account_number
+    |> AccountNumber.print
+
+    assert actual == "1234567890"
   end
 end
