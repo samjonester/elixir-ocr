@@ -1,5 +1,4 @@
 defmodule MultilineString do
-
   def chunk(lines, size) do
     lines
     |> chunk_strings(size)
@@ -14,7 +13,7 @@ defmodule MultilineString do
 
   defp zip_lines(lines) do
     lines
-    |> Enum.zip
+    |> Enum.zip()
     |> Enum.map(&Tuple.to_list/1)
     |> Enum.map(&Enum.join/1)
   end

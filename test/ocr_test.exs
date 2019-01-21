@@ -10,7 +10,7 @@ defmodule OcrTest do
       "                           "
     ]
 
-    assert  Ocr.read_account_number(lines) == {:ok, "345882865"}
+    assert Ocr.read_account_number(lines) == {:ok, "345882865"}
   end
 
   test "produces an error when input doesn't have 4 lines" do
@@ -32,5 +32,4 @@ defmodule OcrTest do
 
     assert {:error, _reason} = Ocr.read_account_number(lines)
   end
-
 end

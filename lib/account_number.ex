@@ -11,16 +11,19 @@ defmodule AccountNumber do
     " _   |  |" => "7",
     " _ |_||_|" => "8",
     " _ |_| _|" => "9",
-    " _ | ||_|" => "0",
+    " _ | ||_|" => "0"
   }
 
   def parse_ascii_chars(chars) do
     numerals = Enum.map(chars, &Map.get(@numerals, &1, "?"))
+
     cond do
       illegible?(numerals) ->
         {:illegible, numerals}
+
       invalid_checksum?(numerals) ->
         {:invalid_checksum, numerals}
+
       true ->
         {:valid, numerals}
     end
@@ -30,20 +33,23 @@ defmodule AccountNumber do
     cond do
       illegible?(account_number) ->
         account_number
+
       true ->
         %AccountNumber{
-          account_number |
-          checksum: Checksum.calculate(account_number.numerals)
+          account_number
+          | checksum: Checksum.calculate(account_number.numerals)
         }
     end
   end
 
   def print(%AccountNumber{} = account_number) do
     cond do
-       illegible?(account_number) ->
+      illegible?(account_number) ->
         "#{print_numerals(account_number)} ILL"
+
       invalid_checksum?(account_number) ->
         "#{print_numerals(account_number)} ERR"
+
       true ->
         print_numerals(account_number)
     end

@@ -3,42 +3,43 @@ defmodule AccountNumberTest do
 
   test "translates all account numerals" do
     chars = [
-      " _ "<>
-      "| |"<>
-      "|_|",
-      "   "<>
-      "  |"<>
-      "  |",
-      " _ "<>
-      " _|"<>
-      "|_ ",
-      " _ "<>
-      " _|"<>
-      " _|",
-      "   "<>
-      "|_|"<>
-      "  |",
-      " _ "<>
-      "|_ "<>
-      " _|",
-      " _ "<>
-      "|_ "<>
-      "|_|",
-      " _ "<>
-      "  |"<>
-      "  |",
-      " _ "<>
-      "|_|"<>
-      "|_|",
-      " _ "<>
-      "|_|"<>
-      " _|",
-      "   "<>
-      " - "<>
-      "   "
+      " _ " <>
+        "| |" <>
+        "|_|",
+      "   " <>
+        "  |" <>
+        "  |",
+      " _ " <>
+        " _|" <>
+        "|_ ",
+      " _ " <>
+        " _|" <>
+        " _|",
+      "   " <>
+        "|_|" <>
+        "  |",
+      " _ " <>
+        "|_ " <>
+        " _|",
+      " _ " <>
+        "|_ " <>
+        "|_|",
+      " _ " <>
+        "  |" <>
+        "  |",
+      " _ " <>
+        "|_|" <>
+        "|_|",
+      " _ " <>
+        "|_|" <>
+        " _|",
+      "   " <>
+        " - " <>
+        "   "
     ]
 
-    assert {_, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "?"]} = AccountNumber.parse_ascii_chars(chars)
+    assert {_, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "?"]} =
+             AccountNumber.parse_ascii_chars(chars)
   end
 
   test "with valid numerals prints the account number" do
@@ -65,18 +66,18 @@ defmodule AccountNumberTest do
 
   test "with invalid checksum returns invalid checksup tuple" do
     chars = [
-      " _ "<>
-      "| |"<>
-      "|_|",
-      "   "<>
-      "  |"<>
-      "  |",
-      " _ "<>
-      " _|"<>
-      "|_ ",
-      " _ "<>
-      " _|"<>
-      " _|"
+      " _ " <>
+        "| |" <>
+        "|_|",
+      "   " <>
+        "  |" <>
+        "  |",
+      " _ " <>
+        " _|" <>
+        "|_ ",
+      " _ " <>
+        " _|" <>
+        " _|"
     ]
 
     assert {:invalid_checksum, ["0", "1", "2", "3"]} = AccountNumber.parse_ascii_chars(chars)

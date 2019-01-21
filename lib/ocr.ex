@@ -20,8 +20,10 @@ defmodule Ocr do
     cond do
       invalid_line_count?(account_lines) ->
         {:error, @moduledoc}
+
       invalid_line_length?(account_lines) ->
         {:error, @moduledoc}
+
       true ->
         {:ok, read(account_lines)}
     end
@@ -33,14 +35,14 @@ defmodule Ocr do
 
   defp invalid_line_length?(account_lines) do
     account_lines
-    |> Enum.any?(fn (l) -> String.length(l) != 27 end)
+    |> Enum.any?(fn l -> String.length(l) != 27 end)
   end
 
   defp read(account_lines) do
     account_lines
     |> Enum.take(3)
     |> MultilineString.chunk(3)
-    |> AccountNumber.parse_ascii_chars
-    |> AccountNumber.print
+    |> AccountNumber.parse_ascii_chars()
+    |> AccountNumber.print()
   end
 end

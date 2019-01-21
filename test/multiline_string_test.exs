@@ -4,11 +4,9 @@ defmodule MultilineStringTest do
   test "chunks multiline string into chars" do
     lines = [
       "..  ",
-      "  --",
+      "  --"
     ]
 
-    assert MultilineString.chunk(lines, 2) == [
-      "..  ",
-      "  --" ]
+    assert MultilineString.chunk(lines, 2) == ["..  ", "  --"]
   end
 end
