@@ -22,7 +22,7 @@ defmodule AccountNumber do
       invalid_checksum?(numerals) ->
         {:invalid_checksum, numerals}
       true ->
-        {:ok, numerals}
+        {:valid, numerals}
     end
   end
 
@@ -49,7 +49,7 @@ defmodule AccountNumber do
     end
   end
 
-  def print({:ok, numerals}) do
+  def print({:valid, numerals}) do
     print(numerals)
   end
 

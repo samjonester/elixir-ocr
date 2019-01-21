@@ -42,7 +42,7 @@ defmodule AccountNumberTest do
   end
 
   test "with valid numerals prints the account number" do
-    account = {:ok, ["1", "2", "3"]}
+    account = {:valid, ["1", "2", "3"]}
     assert AccountNumber.print(account) == "123"
   end
 
