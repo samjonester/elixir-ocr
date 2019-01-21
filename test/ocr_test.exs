@@ -3,31 +3,13 @@ defmodule OcrTest do
   doctest Ocr
 
   test "prints an account number" do
-    account_lines = [
-      "    _ ",
-      "  | _|",
-      "  ||_ ",
-      "      "
+    lines = [
+      "    _  _     _  _  _  _  _ ",
+      "  | _| _||_||_ |_   ||_||_|",
+      "  ||_  _|  | _||_|  ||_| _|",
+      "                           "
     ]
 
-    actual = account_lines
-    |> Ocr.read_account_number
-    |> AccountNumber.print
-
-    assert actual == "12"
-  end
-
-  test "prints ILL when result contains illegible characters" do
-    account_lines = [
-      "      ",
-      "  | _ ",
-      "  |   ",
-      "      " ]
-
-    actual = account_lines
-    |> Ocr.read_account_number
-    |> AccountNumber.print
-
-    assert actual == "1? ILL"
+    assert  Ocr.read_account_number(lines) == "123456789"
   end
 end

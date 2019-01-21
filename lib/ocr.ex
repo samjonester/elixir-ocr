@@ -18,16 +18,9 @@ defmodule Ocr do
   """
   def read_account_number(account_lines) do
     account_lines
+    |> Enum.take(3)
     |> MultilineString.chunk(3)
     |> AccountNumber.from_ascii_chars
-    |> with_ill_status
-  end
-
-  defp with_ill_status(account_number) do
-    if Enum.member?(account_number.numerals, "?") do
-      %{ account_number | status: :ill }
-    else
-      account_number
-    end
+    |> AccountNumber.print
   end
 end

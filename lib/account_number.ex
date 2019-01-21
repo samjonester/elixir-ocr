@@ -1,5 +1,5 @@
 defmodule AccountNumber do
-  defstruct numerals: nil, status: nil
+  defstruct numerals: nil
 
   @numerals %{
     "     |  |" => "1",
@@ -24,16 +24,12 @@ defmodule AccountNumber do
     Map.get(@numerals, char, "?")
   end
 
-  def print(%AccountNumber{numerals: numerals, status: nil}) do
-    Enum.join(numerals)
-  end
-
-  def print(%AccountNumber{numerals: numerals, status: status}) do
-    printable_status =
-      status
-      |> Atom.to_string
-      |> String.upcase
-
-    Enum.join(numerals)<>" #{printable_status}"
+  def print(%AccountNumber{numerals: numerals}) do
+    cond do
+      Enum.member?(numerals, "?") ->
+        "#{Enum.join(numerals)} ILL"
+      true ->
+        Enum.join(numerals)
+    end
   end
 end
