@@ -17,18 +17,10 @@ defmodule Ocr do
 
   """
   def read_account_number(account_lines) do
-    %AccountNumber{}
-    |> with_numerals(account_lines)
+    account_lines
+    |> MultilineString.chunk(3)
+    |> AccountNumber.from_ascii_chars
     |> with_ill_status
-  end
-
-  defp with_numerals(account_number, account_lines) do
-    %{
-      account_number |
-      numerals:
-        account_lines
-        |> Account.split_numerals
-        |> Enum.map(&Account.to_account_char/1) }
   end
 
   defp with_ill_status(account_number) do
