@@ -10,6 +10,27 @@ defmodule OcrTest do
       "                           "
     ]
 
-    assert  Ocr.read_account_number(lines) == "123456789"
+    assert  Ocr.read_account_number(lines) == {:ok, "123456789"}
   end
+
+  test "produces an error when input doesn't have 4 lines" do
+    lines = [
+      "    _  _     _  _  _  _  _ ",
+      "  | _| _||_||_ |_   ||_||_|"
+    ]
+
+    assert {:error, reason} = Ocr.read_account_number(lines) 
+  end
+
+  test "produces an error when input isn't 27 characters long" do
+    lines = [
+      "    _  _     _  _  _  _ ",
+      "  | _| _||_||_ |_   ||_|",
+      "  ||_  _|  | _||_|  ||_|",
+      "                        "
+    ]
+
+    assert {:error, reason} = Ocr.read_account_number(lines)
+  end
+
 end
