@@ -1,6 +1,4 @@
 defmodule AccountNumber do
-  defstruct numerals: nil, checksum: nil
-
   @numerals %{
     "     |  |" => "1",
     " _  _||_ " => "2",
@@ -15,43 +13,17 @@ defmodule AccountNumber do
   }
 
   def parse_ascii_chars(chars) do
-    numerals = Enum.map(chars, &Map.get(@numerals, &1, "?"))
+    with numerals = Enum.map(chars, &Map.get(@numerals, &1, "?")) do
+      cond do
+        illegible?(numerals) ->
+          {:illegible, numerals}
 
-    cond do
-      illegible?(numerals) ->
-        {:illegible, numerals}
+        invalid_checksum?(numerals) ->
+          {:invalid_checksum, numerals}
 
-      invalid_checksum?(numerals) ->
-        {:invalid_checksum, numerals}
-
-      true ->
-        {:valid, numerals}
-    end
-  end
-
-  def decorate_checksum(account_number) do
-    cond do
-      illegible?(account_number) ->
-        account_number
-
-      true ->
-        %AccountNumber{
-          account_number
-          | checksum: Checksum.calculate(account_number.numerals)
-        }
-    end
-  end
-
-  def print(%AccountNumber{} = account_number) do
-    cond do
-      illegible?(account_number) ->
-        "#{print_numerals(account_number)} ILL"
-
-      invalid_checksum?(account_number) ->
-        "#{print_numerals(account_number)} ERR"
-
-      true ->
-        print_numerals(account_number)
+        true ->
+          {:valid, numerals}
+      end
     end
   end
 
@@ -71,20 +43,8 @@ defmodule AccountNumber do
     Enum.join(numerals)
   end
 
-  defp print_numerals(%AccountNumber{numerals: numerals}) do
-    Enum.join(numerals)
-  end
-
-  defp illegible?(%AccountNumber{numerals: numerals}) do
-    Enum.member?(numerals, "?")
-  end
-
   defp illegible?(numerals) do
     Enum.member?(numerals, "?")
-  end
-
-  defp invalid_checksum?(%AccountNumber{checksum: checksum}) do
-    checksum != 0
   end
 
   defp invalid_checksum?(numerals) do
