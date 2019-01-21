@@ -14,7 +14,7 @@ defmodule AccountNumber do
     " _ | ||_|" => "0",
   }
 
-  def from_ascii_chars(chars) do
+  def parse_ascii_chars(chars) do
     numerals = Enum.map(chars, &Map.get(@numerals, &1, "?"))
     cond do
       illegible?(numerals) ->

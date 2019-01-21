@@ -38,7 +38,7 @@ defmodule AccountNumberTest do
       "   "
     ]
 
-    assert {_, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "?"]} = AccountNumber.from_ascii_chars(chars)
+    assert {_, ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "?"]} = AccountNumber.parse_ascii_chars(chars)
   end
 
   test "with valid numerals prints the account number" do
@@ -48,7 +48,7 @@ defmodule AccountNumberTest do
 
   test "with invalid numerals returns illegible tuple" do
     chars = ["-"]
-    assert {:illegible, _} = AccountNumber.from_ascii_chars(chars)
+    assert {:illegible, _} = AccountNumber.parse_ascii_chars(chars)
   end
 
   test "with invalid numerals prints ILL" do
@@ -79,6 +79,6 @@ defmodule AccountNumberTest do
       " _|"
     ]
 
-    assert {:invalid_checksum, ["0", "1", "2", "3"]} = AccountNumber.from_ascii_chars(chars)
+    assert {:invalid_checksum, ["0", "1", "2", "3"]} = AccountNumber.parse_ascii_chars(chars)
   end
 end

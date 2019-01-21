@@ -4,7 +4,7 @@ defmodule Ocr do
   Account number format:
 
   ```
-    _  _     _  _  _  _  _ 
+    _  _     _  _  _  _  _
   | _| _||_||_ |_   ||_||_|
   ||_  _|  | _||_|  ||_| _|
 
@@ -40,7 +40,7 @@ defmodule Ocr do
     account_lines
     |> Enum.take(3)
     |> MultilineString.chunk(3)
-    |> AccountNumber.from_ascii_chars
+    |> AccountNumber.parse_ascii_chars
     |> AccountNumber.print
   end
 end
