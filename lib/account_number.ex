@@ -15,9 +15,8 @@ defmodule AccountNumber do
   }
 
   def from_ascii_chars(chars) do
-    %AccountNumber{
-      numerals: Enum.map(chars, &to_numeral/1)
-    }
+    %AccountNumber{ numerals: Enum.map(chars, &Map.get(@numerals, &1, "?")) }
+    |> AccountNumber.decorate_checksum
   end
 
   def decorate_checksum(account_number) do
@@ -27,22 +26,9 @@ defmodule AccountNumber do
       true ->
         %AccountNumber{
           account_number |
-          checksum: calculate_checksum(account_number)
+          checksum: Checksum.calculate(account_number.numerals)
         }
     end
-  end
-
-  defp calculate_checksum(%AccountNumber{numerals: numerals}) do
-    numerals
-    |> Enum.map(&String.to_integer/1)
-    |> Enum.zip(9..1)
-    |> Enum.map(fn ({n, d}) -> n * d end)
-    |> Enum.sum
-    |> Integer.mod(11)
-  end
-
-  defp to_numeral(char) do
-    Map.get(@numerals, char, "?")
   end
 
   def print(%AccountNumber{} = account_number) do
