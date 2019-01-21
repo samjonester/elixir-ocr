@@ -15,8 +15,15 @@ defmodule AccountNumber do
   }
 
   def from_ascii_chars(chars) do
-    %AccountNumber{ numerals: Enum.map(chars, &Map.get(@numerals, &1, "?")) }
-    |> AccountNumber.decorate_checksum
+    numerals = Enum.map(chars, &Map.get(@numerals, &1, "?"))
+    cond do
+      illegible?(numerals) ->
+        {:illegible, numerals}
+      invalid_checksum?(numerals) ->
+        {:invalid_checksum, numerals}
+      true ->
+        {:ok, numerals}
+    end
   end
 
   def decorate_checksum(account_number) do
@@ -42,6 +49,22 @@ defmodule AccountNumber do
     end
   end
 
+  def print({:ok, numerals}) do
+    print(numerals)
+  end
+
+  def print({:illegible, numerals}) do
+    "#{print(numerals)} ILL"
+  end
+
+  def print({:invalid_checksum, numerals}) do
+    "#{print(numerals)} ERR"
+  end
+
+  def print(numerals) do
+    Enum.join(numerals)
+  end
+
   defp print_numerals(%AccountNumber{numerals: numerals}) do
     Enum.join(numerals)
   end
@@ -50,7 +73,15 @@ defmodule AccountNumber do
     Enum.member?(numerals, "?")
   end
 
+  defp illegible?(numerals) do
+    Enum.member?(numerals, "?")
+  end
+
   defp invalid_checksum?(%AccountNumber{checksum: checksum}) do
     checksum != 0
+  end
+
+  defp invalid_checksum?(numerals) do
+    Checksum.calculate(numerals) != 0
   end
 end

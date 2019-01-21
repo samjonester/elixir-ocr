@@ -19,7 +19,7 @@ defmodule OcrTest do
       "  | _| _||_||_ |_   ||_||_|"
     ]
 
-    assert {:error, reason} = Ocr.read_account_number(lines) 
+    assert {:error, _reason} = Ocr.read_account_number(lines)
   end
 
   test "produces an error when input isn't 27 characters long" do
@@ -30,7 +30,7 @@ defmodule OcrTest do
       "                        "
     ]
 
-    assert {:error, reason} = Ocr.read_account_number(lines)
+    assert {:error, _reason} = Ocr.read_account_number(lines)
   end
 
 end
