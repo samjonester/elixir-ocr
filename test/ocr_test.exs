@@ -4,13 +4,13 @@ defmodule OcrTest do
 
   test "prints an account number" do
     lines = [
-      "    _  _     _  _  _  _  _ ",
-      "  | _| _||_||_ |_   ||_||_|",
-      "  ||_  _|  | _||_|  ||_| _|",
+      " _     _  _  _  _  _  _  _ ",
+      " _||_||_ |_||_| _||_||_ |_ ",
+      " _|  | _||_||_||_ |_||_| _|",
       "                           "
     ]
 
-    assert  Ocr.read_account_number(lines) == {:ok, "123456789"}
+    assert  Ocr.read_account_number(lines) == {:ok, "345882865"}
   end
 
   test "produces an error when input doesn't have 4 lines" do

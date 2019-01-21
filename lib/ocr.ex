@@ -41,6 +41,7 @@ defmodule Ocr do
     |> Enum.take(3)
     |> MultilineString.chunk(3)
     |> AccountNumber.from_ascii_chars
+    |> AccountNumber.decorate_checksum
     |> AccountNumber.print
   end
 end

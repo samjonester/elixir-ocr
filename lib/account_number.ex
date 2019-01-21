@@ -1,5 +1,5 @@
 defmodule AccountNumber do
-  defstruct numerals: nil
+  defstruct numerals: nil, checksum: nil
 
   @numerals %{
     "     |  |" => "1",
@@ -20,16 +20,51 @@ defmodule AccountNumber do
     }
   end
 
+  def decorate_checksum(account_number) do
+    cond do
+      illegible?(account_number) ->
+        account_number
+      true ->
+        %AccountNumber{
+          account_number |
+          checksum: calculate_checksum(account_number)
+        }
+    end
+  end
+
+  defp calculate_checksum(%AccountNumber{numerals: numerals}) do
+    numerals
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.zip(9..1)
+    |> Enum.map(fn ({n, d}) -> n * d end)
+    |> Enum.sum
+    |> Integer.mod(11)
+  end
+
   defp to_numeral(char) do
     Map.get(@numerals, char, "?")
   end
 
-  def print(%AccountNumber{numerals: numerals}) do
+  def print(%AccountNumber{} = account_number) do
     cond do
-      Enum.member?(numerals, "?") ->
-        "#{Enum.join(numerals)} ILL"
+       illegible?(account_number) ->
+        "#{print_numerals(account_number)} ILL"
+      invalid_checksum?(account_number) ->
+        "#{print_numerals(account_number)} ERR"
       true ->
-        Enum.join(numerals)
+        print_numerals(account_number)
     end
+  end
+
+  defp print_numerals(%AccountNumber{numerals: numerals}) do
+    Enum.join(numerals)
+  end
+
+  defp illegible?(%AccountNumber{numerals: numerals}) do
+    Enum.member?(numerals, "?")
+  end
+
+  defp invalid_checksum?(%AccountNumber{checksum: checksum}) do
+    checksum != 0
   end
 end
