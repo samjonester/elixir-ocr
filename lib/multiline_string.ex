@@ -1,4 +1,28 @@
 defmodule MultilineString do
+  @moduledoc ~S'''
+  Functions for processing multiline strings, such as:
+
+  ```
+  """
+   | | | 
+   |-| | 
+   | | | 
+  """
+  ```
+
+  '''
+
+  @doc ~S'''
+  Chunks a multiline string into characters of the specified size
+
+  iex> lines = [
+  ...> "| | | ",
+  ...> "|-| | ",
+  ...> "| | | "
+  ...> ]
+  iex> MultilineString.chunk(lines, 3)
+  ["| ||-|| |", " |  |  | "]
+  '''
   def chunk(lines, size) do
     lines
     |> chunk_strings(size)

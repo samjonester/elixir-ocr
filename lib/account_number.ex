@@ -1,4 +1,8 @@
 defmodule AccountNumber do
+  @moduledoc """
+  Support for parsing account numbers from ascii character blocks & printing the parsed results
+  """
+
   @numerals %{
     "     |  |" => "1",
     " _  _||_ " => "2",
