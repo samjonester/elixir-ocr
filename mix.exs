@@ -7,7 +7,9 @@ defmodule Ocr.MixProject do
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      dialyzer: [flags: [:unmatched_returns, :error_handling, :underspecs]],
+      aliases: aliases()
     ]
   end
 
@@ -26,5 +28,18 @@ defmodule Ocr.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
+  end
+
+  defp aliases do
+    [
+      "test.all": in_env(:test, [:test, :format, :credo, :dialyzer])
+    ]
+  end
+
+  defp in_env(env, tasks) do
+    fn _ ->
+      Mix.env(env)
+      Enum.each(tasks, &Mix.Task.run/1)
+    end
   end
 end

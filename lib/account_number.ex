@@ -16,6 +16,10 @@ defmodule AccountNumber do
     " _ | ||_|" => "0"
   }
 
+  @type account_number ::
+          {:valid, [String.t()]} | {:illegible, [String.t()]} | {:invalid_checksum, [String.t()]}
+
+  @spec parse_ascii_chars([String.t()]) :: account_number
   def parse_ascii_chars(chars) do
     with numerals = Enum.map(chars, &Map.get(@numerals, &1, "?")) do
       cond do
@@ -31,18 +35,22 @@ defmodule AccountNumber do
     end
   end
 
+  @spec print({:valid, [String.t()]}) :: String.t()
   def print({:valid, numerals}) do
     print(numerals)
   end
 
+  @spec print({:illegible, [String.t()]}) :: String.t()
   def print({:illegible, numerals}) do
     "#{print(numerals)} ILL"
   end
 
+  @spec print({:invalid_checksum, [String.t()]}) :: String.t()
   def print({:invalid_checksum, numerals}) do
     "#{print(numerals)} ERR"
   end
 
+  @spec print([String.t()]) :: String.t()
   def print(numerals) do
     Enum.join(numerals)
   end

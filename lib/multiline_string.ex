@@ -23,6 +23,7 @@ defmodule MultilineString do
   iex> MultilineString.chunk(lines, 3)
   ["| ||-|| |", " |  |  | "]
   '''
+  @spec chunk([String.t()], integer) :: [String.t()]
   def chunk(lines, size) do
     lines
     |> chunk_strings(size)

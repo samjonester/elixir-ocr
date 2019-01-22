@@ -18,6 +18,7 @@ defmodule Checksum do
   iex> Checksum.calculate(["1", "2", "3"])
   10
   """
+  @spec calculate([String.t()]) :: integer
   def calculate(values) do
     values
     |> Enum.map(&String.to_integer/1)

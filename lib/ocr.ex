@@ -16,6 +16,7 @@ defmodule Ocr do
   Reads an account number in the form of 4 lines of characters and produces a serializable version of the account number
 
   """
+  @spec read_account_number([String.t()]) :: {:ok, String.t()} | {:error, String.t()}
   def read_account_number(account_lines) do
     cond do
       invalid_line_count?(account_lines) ->
