@@ -1,17 +1,19 @@
 version: 2
+defaults: &defaults
+  working_directory: ~/elixir-ocr
+  docker:
+    - image: elixir:1.8.0
+      environment:
+        MIX_ENV: test
 jobs:
   build:
-    parallelism: 1
-    docker:
-      - image: circleci/elixir:1.8.0
-        environment:
-          MIX_ENV: test
+    <<: *defaults
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependency-cache-{{ checksum "mix.lock" }}
-            - v1-dependency-cache
+            - v2-dependency-cache-{{ checksum "mix.lock" }}
+            - v2-dependency-cache
       - run: mix local.hex --force
       - run: mix local.rebar --force
       - run: mix deps.get
@@ -22,15 +24,76 @@ jobs:
           environment:
             MIX_ENV: test
       - save_cache:
-          key: v1-dependency-cache-{{ checksum "mix.lock"  }}
+          key: v2-dependency-cache-{{ checksum "mix.lock"  }}
           paths:
             - _build
             - deps
             - ~/.mix
-      - run: mix test
-      - run: mix format --check-formatted
-      - run: mix credo
-      - run: mix dialyzer --halt-exit-status
-      - store_test_results:
-          path: _build/test/lib/elixir-ocr
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - elixir-ocr
+            - .mix
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run tests
+          command: mix test
 
+  format:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run formatter
+          command: mix format --check-formatted
+
+  credo:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run credo
+          command: mix credo
+
+  dialyzer:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys:
+            - v1-plt-cache{{ checksum "mix.lock" }}
+            - v1-plt-cache
+      - run: mix dialyzer --plt
+      - save_cache:
+          key: v1-plt-cache{{ checksum "mix.lock" }}
+          paths:
+            - _build
+            - ~/.mix
+      - run:
+          name: Run dialyzer
+          command: mix dialyzer
+
+workflows:
+  version: 2
+  continuous_integration:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - format:
+          requires:
+            - build
+      - credo:
+          requires:
+            - build
+      - dialyzer:
+          requires:
+            - build
