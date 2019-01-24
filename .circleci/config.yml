@@ -61,6 +61,15 @@ jobs:
           name: Run credo
           command: mix credo
 
+  inch:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run inch
+          command: mix inch
+
   dialyzer:
     <<: *defaults
     steps:
@@ -95,5 +104,8 @@ workflows:
           requires:
             - build
       - dialyzer:
+          requires:
+            - build
+      - inch:
           requires:
             - build
