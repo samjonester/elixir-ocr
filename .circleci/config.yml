@@ -79,6 +79,20 @@ jobs:
       - run:
           name: Run dialyzer
           command: mix dialyzer
+  coveralls:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Run coverage report
+          command: mix coveralls
+      - run:
+          name: Run detailed coverage report
+          command: mix coveralls.detail
+      - run:
+          name: Publish coverage report
+          command: mix coveralls.circle
 
 workflows:
   version: 2
@@ -97,3 +111,6 @@ workflows:
       - dialyzer:
           requires:
             - build
+      - coveralls:
+          requires:
+            - test
